@@ -110,6 +110,20 @@
       "type": "Férias",
       "start": "2027-09-01",
       "end": "2027-09-30"
+    },
+    {
+      "id": "0942a814-708a-46ac-92cf-19c1c4c53e20",
+      "person": "09bcb534-96c2-4ea9-a0ce-04f4a47e43cf",
+      "type": "Workshop",
+      "start": "2026-11-17",
+      "end": "2026-11-19"
+    },
+    {
+      "id": "af40b6a3-8994-4478-a000-68f69cb7e6f8",
+      "person": "538573eb-9afa-480f-a643-5cf930b60347",
+      "type": "Workshop",
+      "start": "2026-11-17",
+      "end": "2026-11-19"
     }
   ],
   "absenceTypes": [
