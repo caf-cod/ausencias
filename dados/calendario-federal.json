@@ -1,0 +1,344 @@
+{
+  "version": 1,
+  "checkedAt": "2026-11-17T17:36:49.509920+00:00",
+  "years": {
+    "2026": {
+      "entries": [
+        {
+          "date": "2026-01-01",
+          "name": "Confraternização Universal",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-02-16",
+          "name": "Carnaval",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-02-17",
+          "name": "Carnaval",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-02-18",
+          "name": "Quarta-Feira de Cinzas — até as 14h",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-04-03",
+          "name": "Paixão de Cristo",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-04-20",
+          "name": "Ponto facultativo federal",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-04-21",
+          "name": "Tiradentes",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-05-01",
+          "name": "Dia Mundial do Trabalho",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-06-04",
+          "name": "Corpus Christi",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-06-05",
+          "name": "Ponto facultativo federal",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-09-07",
+          "name": "Independência do Brasil",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-10-12",
+          "name": "Nossa Senhora Aparecida",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-10-30",
+          "name": "Dia do Servidor Público federal",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://www.gov.br/gestao/pt-br/assuntos/noticias/2026/outubro/ponto-facultativo-do-dia-do-servidor-publico-sera-transferido-para-30-de-outubro"
+        },
+        {
+          "date": "2026-11-02",
+          "name": "Finados",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-11-15",
+          "name": "Proclamação da República",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-11-20",
+          "name": "Dia Nacional de Zumbi e da Consciência Negra",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-12-24",
+          "name": "Véspera do Natal — após as 13h",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-12-25",
+          "name": "Natal (feriado nacional); e",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-12-31",
+          "name": "Véspera do Ano Novo — após as 13h",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        }
+      ],
+      "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026",
+      "published": "2025-12-30"
+    }
+  },
+  "recess": {
+    "2026": {
+      "periods": [
+        {
+          "start": "2026-12-21",
+          "end": "2026-12-25",
+          "name": "Recesso de Natal"
+        },
+        {
+          "start": "2026-12-28",
+          "end": "2027-01-01",
+          "name": "Recesso de Ano Novo"
+        }
+      ],
+      "source": "https://www.gov.br/gestao/pt-br/assuntos/editoria-defeso-eleitoral/portaria-do-mgi-orienta-sobre-o-recesso-de-fim-de-ano-de-2026-no-servico-publico-federal",
+      "published": "2026-08-07"
+    }
+  },
+  "documents": {
+    "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026": {
+      "url": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026",
+      "title": "Governo divulga calendário de feriados e pontos facultativos de 2026. Confira",
+      "year": 2026,
+      "hash": "25f131d3bb3d77b5f1cfe2e2060e66024da503796d52d7b5bf51b42f2138504a",
+      "published": "2025-12-30",
+      "type": "calendar",
+      "entries": [
+        {
+          "date": "2026-01-01",
+          "name": "Confraternização Universal",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-02-16",
+          "name": "Carnaval",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-02-17",
+          "name": "Carnaval",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-02-18",
+          "name": "Quarta-Feira de Cinzas — até as 14h",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-04-03",
+          "name": "Paixão de Cristo",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-04-20",
+          "name": "Ponto facultativo federal",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-04-21",
+          "name": "Tiradentes",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-05-01",
+          "name": "Dia Mundial do Trabalho",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-06-04",
+          "name": "Corpus Christi",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-06-05",
+          "name": "Ponto facultativo federal",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-09-07",
+          "name": "Independência do Brasil",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-10-12",
+          "name": "Nossa Senhora Aparecida",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-10-28",
+          "name": "Dia do Servidor Público federal",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-11-02",
+          "name": "Finados",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-11-15",
+          "name": "Proclamação da República",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-11-20",
+          "name": "Dia Nacional de Zumbi e da Consciência Negra",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-12-24",
+          "name": "Véspera do Natal — após as 13h",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-12-25",
+          "name": "Natal (feriado nacional); e",
+          "kind": "Feriado nacional",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        },
+        {
+          "date": "2026-12-31",
+          "name": "Véspera do Ano Novo — após as 13h",
+          "kind": "Ponto facultativo federal",
+          "automatic": true,
+          "source": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026"
+        }
+      ]
+    },
+    "https://www.gov.br/gestao/pt-br/assuntos/editoria-defeso-eleitoral/portaria-do-mgi-orienta-sobre-o-recesso-de-fim-de-ano-de-2026-no-servico-publico-federal": {
+      "url": "https://www.gov.br/gestao/pt-br/assuntos/editoria-defeso-eleitoral/portaria-do-mgi-orienta-sobre-o-recesso-de-fim-de-ano-de-2026-no-servico-publico-federal",
+      "title": "Portaria do MGI orienta sobre o recesso de fim de ano de 2026 no serviço público federal",
+      "year": 2026,
+      "hash": "69cf8516484569a08114a348b65425dceca3396ef87aed41f44ca5a150cab3a0",
+      "published": "2026-08-07",
+      "type": "recess",
+      "periods": [
+        {
+          "start": "2026-12-21",
+          "end": "2026-12-25",
+          "name": "Recesso de Natal"
+        },
+        {
+          "start": "2026-12-28",
+          "end": "2027-01-01",
+          "name": "Recesso de Ano Novo"
+        }
+      ]
+    },
+    "https://www.gov.br/gestao/pt-br/assuntos/noticias/2026/outubro/ponto-facultativo-do-dia-do-servidor-publico-sera-transferido-para-30-de-outubro": {
+      "url": "https://www.gov.br/gestao/pt-br/assuntos/noticias/2026/outubro/ponto-facultativo-do-dia-do-servidor-publico-sera-transferido-para-30-de-outubro",
+      "title": "Ponto facultativo do Dia do Servidor Público será transferido para 30 de outubro",
+      "year": 2026,
+      "hash": "d0fffffab884d9f342fa2c8e002d11340b6aba88b81a887a65b1151347f9d8c8",
+      "published": "2026-10-26",
+      "type": "transfer",
+      "date": "2026-10-30"
+    }
+  },
+  "review": [
+    {
+      "source": "https://www.gov.br/gestao/pt-br/@@search",
+      "reason": "Título não identifica calendário ou recesso"
+    }
+  ],
+  "discovery": "Notícias recentes do MGI (até 3 páginas), Agência Gov e fontes já conhecidas. Não abrange todo o DOU."
+}
