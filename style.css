@@ -10,3 +10,6 @@
 .upcoming-notice p{color:#6e5b2b}
 .upcoming-notice ul{padding-left:22px;margin:14px 0;line-height:1.9;font-size:14px}
 @media print{.cell.current{background:#d6f0e2!important;print-color-adjust:exact}.head .cell.current{background:#07523f!important;color:white!important;print-color-adjust:exact}}
+
+
+.cell.holiday-day{background:#efebfa;border-left:1px solid #b5a3d9;border-right:1px solid #b5a3d9}.head .cell.holiday-day{color:#543782;font-weight:700}.holiday-marker{display:block;color:#77529e;font-size:10px}.cell.holiday-day.current{background:#d6f0e2}.head .cell.holiday-day.current{background:#07523f;color:white}.head .cell.current .holiday-marker{color:#e2d5ff}.holiday-overlap{color:#664689;font-size:12px;max-width:720px}
