@@ -92,7 +92,7 @@ def discover(s,base):
  for href,label in re.findall(r'<a\b[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',s,re.I|re.S):
   url=urljoin(base,html.unescape(href)).split('#')[0].split('?')[0]
   title=norm(plain(label)+' '+url.rsplit('/',1)[-1])
-  if allowed(url) and any(w in title for w in ['recesso','feriados','ponto-facultativo','pontos-facultativos']) and not url.endswith(('.pdf','/RSS')):urls.append(url)
+  if allowed(url) and any(w in title for w in ['recesso','feriados','ponto-facultativo','pontos-facultativos']) and '/@@' not in url and not url.endswith(('.pdf','/RSS')):urls.append(url)
  return sorted(set(urls))
 def compile_docs(documents):
  years={};recess={}
@@ -103,7 +103,6 @@ def compile_docs(documents):
   elif doc['type']=='transfer' and year in years:
    entries=years[year]['entries']; targets=[e for e in entries if 'servidor publico' in norm(e['name'])]
    if len(targets)!=1:continue
-   targets[0]=dict(targets[0]);target=targets[0]
    years[year]['entries']=[dict(e,date=doc['date'],source=doc['url']) if 'servidor publico' in norm(e['name']) else e for e in entries]
  for payload in years.values():payload['entries']=sorted(payload['entries'],key=lambda e:(e['date'],e['name']))
  return years,recess
