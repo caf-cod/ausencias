@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "checkedAt": "2026-11-17T17:36:49.509920+00:00",
+  "checkedAt": "2026-11-17T17:39:14.891209+00:00",
   "years": {
     "2026": {
       "entries": [
@@ -165,7 +165,7 @@
       "url": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026",
       "title": "Governo divulga calendário de feriados e pontos facultativos de 2026. Confira",
       "year": 2026,
-      "hash": "25f131d3bb3d77b5f1cfe2e2060e66024da503796d52d7b5bf51b42f2138504a",
+      "hash": "a73b97360e3cb31b0b68aa73d85fe17dd0f375929c3bc2704fa5b4fa2551e666",
       "published": "2025-12-30",
       "type": "calendar",
       "entries": [
@@ -334,11 +334,6 @@
       "date": "2026-10-30"
     }
   },
-  "review": [
-    {
-      "source": "https://www.gov.br/gestao/pt-br/@@search",
-      "reason": "Título não identifica calendário ou recesso"
-    }
-  ],
+  "review": [],
   "discovery": "Notícias recentes do MGI (até 3 páginas), Agência Gov e fontes já conhecidas. Não abrange todo o DOU."
 }
