@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "people": [
+    {
+      "id": "0d3038e1-7bae-4eb3-a9f8-a05897a33eeb",
+      "name": "Aline"
+    },
+    {
+      "id": "e4df2fe8-844a-47fc-917c-db639a95960f",
+      "name": "Anderson"
+    },
+    {
+      "id": "ff95a36f-91fa-410c-a447-c77f9a0792c8",
+      "name": "Fábio"
+    },
+    {
+      "id": "93af4b75-6dc7-45e5-b8a2-244b2d8d5eab",
+      "name": "Felipe"
+    },
+    {
+      "id": "ccda32a7-be35-4a7f-982f-289c342d0afb",
+      "name": "Tatiana"
+    }
+  ],
+  "records": [
+    {
+      "id": "355effdc-02bb-40ce-be9b-00d64cec7574",
+      "person": "0d3038e1-7bae-4eb3-a9f8-a05897a33eeb",
+      "type": "Recesso",
+      "start": "2026-12-28",
+      "end": "2027-01-01"
+    },
+    {
+      "id": "5e9d41f6-4f70-4ed2-8249-b6126a0e8ec9",
+      "person": "e4df2fe8-844a-47fc-917c-db639a95960f",
+      "type": "Recesso",
+      "start": "2026-12-28",
+      "end": "2027-01-01"
+    },
+    {
+      "id": "c1afebb9-b7de-46ee-8140-bf09e4b9c57b",
+      "person": "e4df2fe8-844a-47fc-917c-db639a95960f",
+      "type": "Férias",
+      "start": "2027-01-05",
+      "end": "2027-01-19"
+    },
+    {
+      "id": "37db2c85-c59e-461b-96b6-6dda09bb7893",
+      "person": "ff95a36f-91fa-410c-a447-c77f9a0792c8",
+      "type": "Férias",
+      "start": "2026-12-07",
+      "end": "2026-12-18"
+    },
+    {
+      "id": "2c864904-0899-4c44-8871-f7185b726674",
+      "person": "ff95a36f-91fa-410c-a447-c77f9a0792c8",
+      "type": "Recesso",
+      "start": "2026-12-21",
+      "end": "2026-12-25"
+    },
+    {
+      "id": "990dbd53-74c9-4aa7-8c89-f1a5880d29f6",
+      "person": "ccda32a7-be35-4a7f-982f-289c342d0afb",
+      "type": "Recesso",
+      "start": "2026-12-21",
+      "end": "2026-12-25"
+    },
+    {
+      "id": "8aa2c3c0-61ae-4a8e-aa51-5385ca4ff714",
+      "person": "ccda32a7-be35-4a7f-982f-289c342d0afb",
+      "type": "Férias",
+      "start": "2027-02-01",
+      "end": "2027-02-28"
+    }
+  ]
+}
