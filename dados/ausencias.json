@@ -137,6 +137,8 @@
     "Férias",
     "Licença",
     "Recesso",
-    "Workshop"
-  ]
+    "Workshop",
+    "Viagem"
+  ],
+  "holidays": []
 }
