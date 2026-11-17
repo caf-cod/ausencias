@@ -31,3 +31,15 @@ Filtros afetam calendário, lista, sobreposições e CSV. Os indicadores de disp
 Aplicação estática sem build: GitHub Pages → Deploy from a branch → main → /(root). Arquivos: `index.html`, `style.css`, `app.js` e `dados/ausencias.json`.
 
 O repositório e a base são públicos. Não registre motivos de licenças, informações de saúde ou outros dados restritos. Versões anteriores do arquivo continuam no histórico de commits do GitHub.
+
+
+
+## Calendário federal automático
+
+O workflow `.github/workflows/calendar.yml` executa diariamente às 10h17 UTC (07h17 em Brasília), por push dos scripts ou manualmente pelo GitHub Actions. Usa o GITHUB_TOKEN efêmero com Contents: write, sem token pessoal ou segredo adicional. Testa os extratores, consulta fontes oficiais e publica `dados/calendario-federal.json`. A aplicação lê esse arquivo diretamente pela API em cada abertura, sem depender de novo deploy do Pages. O botão Recarregar calendário busca a última versão publicada; não dispara o robô.
+
+As fontes são as três primeiras páginas de notícias recentes do MGI, a editoria de notícias e a página inicial da Agência Gov, além dos artigos oficiais já conhecidos. Não há API geral do DOU nem garantia de identificar toda alteração normativa. Descoberta limitada a 60 links por execução. Sites podem mudar ou bloquear consultas.
+
+O extrator aceita listas anuais completas (mínimo de 9 feriados, 14 datas e marcos de janeiro/dezembro), transferência explícita do Dia do Servidor e dois períodos explícitos de recesso atravessando o ano. Textos não reconhecidos, PDFs e casos especiais exigem revisão. Publicações já validadas são preservadas se a rede ou o parser falhar. Isso evita substituir calendário por lista parcial. O JSON mantém URLs, datas de publicação, hashes e relatório de revisão; o resumo do Actions mostra falhas.
+
+Previsões do código são usadas quando o ano ainda não tem publicação validada. O recesso não cria ausências individuais. Dados locais continuam no backup de ausências, sem mistura com o arquivo automático. Confirme o funcionamento na aba Actions após habilitar a rotina. GitHub pode suspender agendamentos em repositórios públicos inativos por 60 dias e pode atrasar execuções; a data da última consulta fica visível na aplicação. Novos formatos requerem atualização dos extratores e testes.
