@@ -124,6 +124,13 @@
       "type": "Workshop",
       "start": "2026-11-17",
       "end": "2026-11-19"
+    },
+    {
+      "id": "b756fd34-12df-427a-bb61-d6a46694e92b",
+      "person": "655c2c40-099f-46bd-bc60-ad427e626017",
+      "type": "Férias",
+      "start": "2026-11-09",
+      "end": "2026-11-20"
     }
   ],
   "absenceTypes": [
