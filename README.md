@@ -1,25 +1,33 @@
 # Gestão de ausências · CAF
 
-Aplicação estática para planejamento de férias, licenças e recesso da coordenação, seguindo a identidade visual do portal CAF.
+Calendário mensal para planejamento de férias, licenças e recesso da coordenação.
 
-## Uso
-Abra `index.html` em um servidor estático ou habilite GitHub Pages em **Settings → Pages → Deploy from a branch → main → /(root)**. O endereço previsto após habilitar é https://caf-cod.github.io/ausencias/ .
+## Base compartilhada
 
-1. Cadastre os colaboradores.
-2. Registre o tipo e as datas de cada ausência.
-3. Consulte o calendário mensal e as sobreposições em vermelho.
-4. Edite ou exclua os períodos conforme necessário.
+A aplicação consulta automaticamente `dados/ausencias.json` na branch `main`, pela API do GitHub e sem cache, em cada abertura. O arquivo inicial é o backup fornecido em 17/11/2026. Ninguém precisa conectar uma conta para consultar a base pública.
 
-Datas inicial e final são inclusivas. As contagens são de dias corridos, sem descontar feriados ou finais de semana. Sobreposições entre pessoas diferentes são permitidas com aviso; períodos simultâneos para a mesma pessoa são bloqueados. Os filtros afetam calendário, alertas, lista e CSV. Os indicadores de disponibilidade de hoje consideram toda a equipe.
+As alterações na tela ficam pendentes até clicar em **Salvar alterações**. Esse botão atualiza o mesmo arquivo no GitHub e cria um commit. Os próximos acessos carregam a atualização. Em abas que já estavam abertas, use **Recarregar** para consultar a nova versão.
 
-## Armazenamento
-Os dados permanecem no localStorage do navegador, sem envio ao GitHub e sem sincronização entre computadores. Exportação JSON cria um backup completo; importação substitui os dados locais após confirmação. CSV exporta o recorte exibido. Limpar os dados do navegador remove os registros; mantenha backups.
+Para salvar:
 
-Para uma base compartilhada com edição simultânea será necessário integrar autenticação e banco de dados. Esta versão não fornece esse serviço. Não registre informações de saúde ou motivos de licenças.
+1. Uma conta com permissão de escrita no repositório cria um fine-grained personal access token no GitHub.
+2. Selecione o proprietário caf-cod e apenas o repositório ausencias, concedendo `Contents: Read and write`. Configure uma validade limitada.
+3. Na aplicação, clique em **Conectar ao GitHub**, informe o token e clique em **Salvar alterações** após editar.
 
-## Arquivos
-- `index.html`: interface acessível e formulário.
-- `style.css`: identidade institucional, calendário responsivo e impressão.
-- `app.js`: cadastros, validação de datas, persistência, alertas, CSV e backup.
+O token fica apenas em memória na aba e vai diretamente para api.github.com. Não é armazenado em localStorage, backup ou código. Recarregar, fechar a página ou clicar em Desconectar remove a conexão. Não compartilhe tokens: cada editor deve usar seu próprio acesso autorizado. Nenhuma credencial é distribuída com a aplicação.
 
-O cabeçalho utiliza o ativo institucional já publicado em caf-cod/formulario. Sem dependências de build.
+Antes de salvar, a aplicação confere o SHA da base que carregou. Se outra pessoa atualizou o arquivo, bloqueia a sobrescrita: exporte seu backup, recarregue e reaplique as alterações. O SHA também é enviado na gravação para proteger contra atualizações concorrentes durante o envio. Se houver erro ou resposta incerta, confira a versão remota antes de reenviar.
+
+Alterações pendentes permanecem somente na aba atual. Exporte JSON antes de fechar se não puder salvar. O navegador exibe um aviso de saída quando possível. A importação de backup altera a versão em edição; ela só será compartilhada após salvar no GitHub.
+
+## Calendário
+
+Cadastre colaboradores e períodos. As datas inicial e final são inclusivas, com contagem de dias corridos. Ausências de pessoas diferentes podem coincidir e aparecem nos alertas. Períodos simultâneos da mesma pessoa são bloqueados no formulário.
+
+Filtros afetam calendário, lista, sobreposições e CSV. Os indicadores de disponibilidade de hoje consideram toda a equipe. CSV exporta o recorte; JSON exporta toda a base em edição.
+
+## Publicação
+
+Aplicação estática sem build: GitHub Pages → Deploy from a branch → main → /(root). Arquivos: `index.html`, `style.css`, `app.js` e `dados/ausencias.json`.
+
+O repositório e a base são públicos. Não registre motivos de licenças, informações de saúde ou outros dados restritos. Versões anteriores do arquivo continuam no histórico de commits do GitHub.
