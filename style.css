@@ -15,4 +15,6 @@
 .cell.holiday-day{background:#efebfa;border-left:1px solid #b5a3d9;border-right:1px solid #b5a3d9}.head .cell.holiday-day{color:#543782;font-weight:700}.holiday-marker{display:block;color:#77529e;font-size:10px}.cell.holiday-day.current{background:#d6f0e2}.head .cell.holiday-day.current{background:#07523f;color:white}.head .cell.current .holiday-marker{color:#e2d5ff}.holiday-overlap{color:#664689;font-size:12px;max-width:720px}
 
 
-.cell.recess-day{border-bottom:4px solid #c58d21;background-image:linear-gradient(to top,#f8e7b855 0,#f8e7b855 6px,transparent 6px)}.head .cell.recess-day{border-bottom:4px solid #c58d21}
+.cell.recess-day{border-bottom:4px solid #79bce8;background-image:linear-gradient(#dff1ffb3,#dff1ffb3)}.head .cell.recess-day{border-bottom:4px solid #79bce8}
+
+.cell.recess-day.current{background-image:none}.head .cell.recess-day.current{background-image:none}
