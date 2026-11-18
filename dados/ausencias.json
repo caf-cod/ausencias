@@ -131,6 +131,27 @@
       "type": "Férias",
       "start": "2026-11-09",
       "end": "2026-11-20"
+    },
+    {
+      "id": "fdfd9e70-f027-4250-95c5-0fedc86dcad7",
+      "person": "82102796-0714-4595-bff3-850eba65aad9",
+      "type": "Workshop",
+      "start": "2026-11-17",
+      "end": "2026-11-19"
+    },
+    {
+      "id": "eaa71538-c530-4f10-9bfe-c8c62f1b3d46",
+      "person": "130409a4-7fac-450a-b902-70a7595871c0",
+      "type": "Workshop",
+      "start": "2026-11-18",
+      "end": "2026-11-19"
+    },
+    {
+      "id": "1b3661cd-0441-4a1c-bdea-4ded9eb3dcdc",
+      "person": "2213901a-8c21-45dd-baa8-b4f2e5aeee7e",
+      "type": "Workshop",
+      "start": "2026-11-17",
+      "end": "2026-11-20"
     }
   ],
   "absenceTypes": [
@@ -140,5 +161,12 @@
     "Workshop",
     "Viagem"
   ],
-  "holidays": []
+  "holidays": [
+    {
+      "id": "e602060c-fe3d-4708-9f84-c5cf939c9fbf",
+      "name": "Confraternização SAF",
+      "date": "2026-12-11",
+      "kind": "Ponto facultativo"
+    }
+  ]
 }
