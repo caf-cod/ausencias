@@ -1,6 +1,47 @@
 {
   "version": 1,
-  "people": [],
+  "people": [
+    {
+      "id": "88b595ff-e0ea-4f24-b7ba-05963f30c4e9",
+      "name": "Adriana da Conceição dos Santos"
+    },
+    {
+      "id": "4cb837d7-4813-46dc-849b-73463a911536",
+      "name": "Abrahão Alexandre Barros de Lima"
+    },
+    {
+      "id": "59500a79-b0c1-4666-9679-204087708474",
+      "name": "André Marques de Almeida Pessoa"
+    },
+    {
+      "id": "308623d9-a32b-4c87-a626-fb86f090aac8",
+      "name": "Beatriz Alves Lopes de Oliveira"
+    },
+    {
+      "id": "b0947288-b658-48fd-a667-eaa97b1a0bab",
+      "name": "Joan Pereira Batista"
+    },
+    {
+      "id": "e618d77f-3114-4da4-8d48-0caff8eefe3b",
+      "name": "Julierry Marjorie Carvalho Silva"
+    },
+    {
+      "id": "470a157f-b50d-41bc-830b-9bfb573aa31a",
+      "name": "Noelton de Souza Pinto"
+    },
+    {
+      "id": "7f8f91c7-0b8e-4a8a-9574-98726e641d75",
+      "name": "Marianne Alves Paulino"
+    },
+    {
+      "id": "6de79649-53d4-455e-9b78-7de3d68c06eb",
+      "name": "Talita Cordeiro Galhardo"
+    },
+    {
+      "id": "c3ed4f29-73bd-4f84-b092-6d83958b088f",
+      "name": "Philippe Satoshi Almeida Kato"
+    }
+  ],
   "records": [],
   "absenceTypes": [
     "Férias",
