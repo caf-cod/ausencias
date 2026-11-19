@@ -42,15 +42,64 @@ $('timeline').style.setProperty('--days',n);$('timeline').innerHTML=`<div class=
 $('overlaps').innerHTML=pairs.length?pairs.map(p=>`<article class="overlap"><strong>${esc(name(p.a.person))} + ${esc(name(p.b.person))}</strong><p>${fmt(p.start)} a ${fmt(p.end)} · ${days(p.start,p.end)} dia(s)</p><p>${esc(p.a.type)} / ${esc(p.b.type)}</p></article>`).join(''):'<div class="empty">🌿 Nenhuma sobreposição no recorte selecionado.</div>';
 $('people').innerHTML=sortedPeople().map(p=>`<div class="person"><span><span class="avatar">${esc(p.name.slice(0,1).toUpperCase())}</span>${esc(p.name)}</span><div class="controls"><button class="outline" data-rename="${esc(p.id)}">Editar</button><button class="outline" data-remove-person="${esc(p.id)}">Remover</button></div></div>`).join('')||'<p class="empty">Sua equipe aparecerá aqui.</p>';
 $('listCaption').textContent=`${list.length} período(s) no recorte selecionado`;$('records').innerHTML=list.map(r=>`<article class="record"><div><strong>${esc(name(r.person))}</strong><p>${fmt(r.start)} a ${fmt(r.end)} · ${days(r.start,r.end)} dias corridos</p>${holidaysInRange(r.start,r.end).length?`<p class="holiday-overlap">📅 Inclui: ${esc(holidaysInRange(r.start,r.end).map(h=>fmt(h.date)+" — "+h.name).join("; "))}</p>`:""}</div><span class="badge ${meta(r.type)[1]}">${meta(r.type)[0]} ${esc(r.type)}</span>${conflicts.has(r.id)?'<span class="red">⚠ Sobreposição</span>':''}<button class="outline" data-edit="${esc(r.id)}">Editar período</button></article>`).join('')||'<div class="empty">📅 Nenhum período neste recorte.</div>';}
-function open(id){if(!catalog(state).length){message('Cadastre um tipo de ausência primeiro.');$('typeName').focus();return;}if(!state.people.length){message('Cadastre um colaborador primeiro.');$('personName').focus();return;}const r=state.records.find(r=>r.id===id);$('absenceForm').reset();$('recordId').value=r?.id||'';if(r){for(const k of ['person','type','start','end'])$(k).value=r[k];}$('delete').hidden=!r;$('dialogTitle').textContent=r?'Editar ausência':'Registrar ausência';warn();$('dialog').showModal();}
+function open(id){if(!catalog(state).length){message('Cadastre um tipo de ausência primeiro.');$('typeName').focus();return;}if(!state.people.length){message('Cadastre um colaborador primeiro.');$('personName').focus();return;}const r=state.records.find(r=>r.id===id);$('absenceForm').reset();$('recordId').value=r?.id||'';if(r){for(const k of ['person','type','start','end'])$(k).value=r[k];}$('delete').hidden=!r;$('dialogTitle').textContent=r?'Editar ausência':'Registrar ausência';configureRecessForm(true);warn();$('dialog').showModal();}
+function currentRecessPeriods() {
+  return federalRecess(Number(coordinationDay().slice(0, 4)));
+}
+
+function recessOption(period) {
+  return period.start + '/' + period.end;
+}
+
+function alreadyHasRecess(records, person, id, periods) {
+  return records.some(record => record.id !== id && record.person === person &&
+    record.type === 'Recesso' && periods.some(period => clash(record, period)));
+}
+
+function configureRecessForm(initialize = false) {
+  const select = $('recessPeriod');
+  const isRecess = $('type').value === 'Recesso';
+  const dates = ['start', 'end'].map($);
+  $('recessField').hidden = !isRecess;
+  $('recessField').style.display = isRecess ? '' : 'none';
+  $('absenceDates').style.display = isRecess ? 'none' : '';
+  select.disabled = !isRecess;
+  for (const dateInput of dates) dateInput.disabled = isRecess;
+  if (!isRecess) return;
+  const current = initialize ? dates.map(input => input.value).join('/') : select.value;
+  const periods = currentRecessPeriods();
+  select.replaceChildren(new Option('Selecione um período', ''));
+  for (const period of periods) {
+    const label = period.name + ' · ' + fmt(period.start) + ' a ' + fmt(period.end);
+    select.add(new Option(label, recessOption(period)));
+  }
+  select.value = periods.some(period => recessOption(period) === current) ? current : '';
+  const selected = periods.find(period => recessOption(period) === select.value);
+  $('start').value = selected?.start || '';
+  $('end').value = selected?.end || '';
+}
+
 function warn(){const a={person:$('person').value,start:$('start').value,end:$('end').value};$('end').min=a.start;$('end').setCustomValidity(a.end&&a.start>a.end?'A data final deve ser igual ou posterior à inicial.':'');const others=state.records.filter(b=>b.id!==$('recordId').value&&a.start&&a.end&&clash(a,b));$('liveWarning').textContent=others.length?'⚠ Este período coincide com: '+[...new Set(others.map(b=>name(b.person)))].join(', ')+'. Confira antes de salvar.':'';const holidays=holidaysInRange(a.start,a.end);if(holidays.length)$('liveWarning').textContent+=' 📅 O período inclui: '+holidays.map(h=>fmt(h.date)+' — '+h.name+' ('+h.kind+')').join('; ')+'. A contagem permanece em dias corridos.';}
 function renderTypes(){const labels=[...catalog(state)].sort((a,b)=>a.localeCompare(b,'pt-BR',{sensitivity:'base'}));const filter=$('typeFilter').value,chosen=$('type').value;const options=labels.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('');$('typeFilter').innerHTML='<option value="">Todos os tipos</option>'+options;$('typeFilter').value=labels.includes(filter)?filter:'';$('type').innerHTML=options;if(labels.includes(chosen))$('type').value=chosen;$('typeLegend').innerHTML=labels.map(t=>`<span>${meta(t)[0]} ${esc(t)}</span>`).join('')+'<span class="red">⚠ Sobreposição</span>';$('typeList').innerHTML=labels.map(t=>{const count=state.records.filter(r=>r.type===t).length;return `<div class="person"><div><strong>${meta(t)[0]} ${esc(t)}</strong><p>${count} período(s) vinculado(s)</p></div><button class="outline" data-remove-type="${catalog(state).indexOf(t)}" ${count?'disabled title="Altere ou exclua os períodos vinculados antes de remover este tipo"':''}>Excluir tipo</button></div>`;}).join('')||'<p class="empty">Nenhum tipo cadastrado. Adicione um para registrar ausências.</p>';}
 $('typeForm').onsubmit=e=>{e.preventDefault();const label=$('typeName').value.trim();if(!label||label.length>60)return;if(catalog(state).length>=100)return message('Limite de 100 tipos atingido.');if(catalog(state).some(t=>normalizeLabel(t)===normalizeLabel(label)))return message('Este tipo de ausência já está cadastrado.');if(save({...state,absenceTypes:[...catalog(state),label]})){$('typeForm').reset();message('Tipo adicionado. Clique em Salvar alterações para compartilhar.');}};
 $('personForm').onsubmit=e=>{e.preventDefault();const value=$('personName').value.trim();if(!value)return;const normalized=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();if(state.people.some(p=>normalized(p.name)===normalized(value)))return message('Este colaborador já está cadastrado.');if(save({...state,people:[...state.people,{id:crypto.randomUUID(),name:value}]})){$('personForm').reset();message('Colaborador adicionado.');}};
-$('absenceForm').onsubmit=e=>{e.preventDefault();warn();if(!$('absenceForm').reportValidity())return;const r={id:$('recordId').value||crypto.randomUUID(),person:$('person').value,type:$('type').value,start:$('start').value,end:$('end').value};if(!catalog(state).includes(r.type))return alert('Selecione um tipo de ausência válido.');if(state.records.some(b=>b.id!==r.id&&b.person===r.person&&clash(r,b)))return alert('Este colaborador já possui uma ausência nesse período. Ajuste as datas ou edite o registro existente.');if(save({...state,records:[...state.records.filter(b=>b.id!==r.id),r]})){$('dialog').close();message('Período salvo.');}};
+$('absenceForm').onsubmit=e=>{e.preventDefault();configureRecessForm();warn();if(!$('absenceForm').reportValidity())return;const r={id:$('recordId').value||crypto.randomUUID(),person:$('person').value,type:$('type').value,start:$('start').value,end:$('end').value};if(!catalog(state).includes(r.type))return alert('Selecione um tipo de ausência válido.');if (r.type === 'Recesso') {
+  const periods = currentRecessPeriods();
+  if (!periods.some(period => period.start === r.start && period.end === r.end)) {
+    return alert('Selecione um período completo de recesso do ano corrente.');
+  }
+  if (alreadyHasRecess(state.records, r.person, r.id, periods)) {
+    return alert('Este colaborador já tem um recesso registrado neste ano. Edite o registro existente para trocar de período.');
+  }
+}
+if(state.records.some(b=>b.id!==r.id&&b.person===r.person&&clash(r,b)))return alert('Este colaborador já possui uma ausência nesse período. Ajuste as datas ou edite o registro existente.');if(save({...state,records:[...state.records.filter(b=>b.id!==r.id),r]})){$('dialog').close();message('Período salvo.');}};
 $('delete').onclick=()=>{if(confirm('Excluir este período?')){if(save({...state,records:state.records.filter(r=>r.id!==$('recordId').value)}))$('dialog').close();}};
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.removeHoliday){if(confirm('Excluir esta data cadastrada?'))save({...state,holidays:customHolidays(state).filter(h=>h.id!==b.dataset.removeHoliday)});return;}if(b.dataset.removeType!==undefined){const label=catalog(state)[Number(b.dataset.removeType)];if(!label)return;if(state.records.some(r=>r.type===label))return alert('Este tipo está vinculado a períodos cadastrados. Altere ou exclua esses períodos antes de remover o tipo.');if(confirm('Excluir o tipo de ausência '+label+'?'))save({...state,absenceTypes:catalog(state).filter(t=>t!==label)});return;}if(b.dataset.edit)open(b.dataset.edit);if(b.dataset.removePerson){const id=b.dataset.removePerson;if(state.records.some(r=>r.person===id))return alert('Exclua os períodos deste colaborador antes de removê-lo.');if(confirm('Remover este colaborador?'))save({...state,people:state.people.filter(p=>p.id!==id)});}if(b.dataset.rename){const p=state.people.find(p=>p.id===b.dataset.rename),v=prompt('Nome do colaborador:',p.name)?.trim();if(v&&v.length<=100){if(state.people.some(x=>x.id!==p.id&&x.name.toLocaleLowerCase()===v.toLocaleLowerCase()))return alert('Nome já cadastrado.');save({...state,people:state.people.map(x=>x.id===p.id?{...x,name:v}:x)});}}});
-$('new').onclick=()=>open();$('close').onclick=()=>$('dialog').close();for(const id of ['person','start','end'])$(id).oninput=warn;for(const id of ['month','personFilter','typeFilter'])$(id).onchange=()=>{if($('month').value)render();};function move(n){const [y,m]=$('month').value.split('-').map(Number);$('month').value=iso(new Date(y,m-1+n,1)).slice(0,7);render();}$('prev').onclick=()=>move(-1);$('next').onclick=()=>move(1);$('today').onclick=()=>{$('month').value=iso(new Date()).slice(0,7);render();};
+$('new').onclick=()=>open();$('close').onclick=()=>$('dialog').close();for (const id of ['type', 'recessPeriod']) $(id).onchange = () => {
+  configureRecessForm();
+  warn();
+};
+for(const id of ['person','start','end'])$(id).oninput=warn;for(const id of ['month','personFilter','typeFilter'])$(id).onchange=()=>{if($('month').value)render();};function move(n){const [y,m]=$('month').value.split('-').map(Number);$('month').value=iso(new Date(y,m-1+n,1)).slice(0,7);render();}$('prev').onclick=()=>move(-1);$('next').onclick=()=>move(1);$('today').onclick=()=>{$('month').value=iso(new Date()).slice(0,7);render();};
 function download(text,file,type){const url=URL.createObjectURL(new Blob([text],{type})),a=document.createElement('a');a.href=url;a.download=file;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 $('backup').onclick=()=>download(JSON.stringify(state,null,2),'ausencias-'+coordination+'-backup-'+iso(new Date())+'.json','application/json');$('csv').onclick=()=>{const cell=s=>'"'+String(/^[=+@\-\t\r]/.test(s)?"'"+s:s).replace(/"/g,'""')+'"';download('\ufeff'+[['Colaborador','Tipo','Início','Fim','Dias corridos'],...filtered().map(r=>[name(r.person),r.type,fmt(r.start),fmt(r.end),days(r.start,r.end)])].map(row=>row.map(cell).join(';')).join('\r\n'),'ausencias-'+coordination+'-'+$('month').value+'.csv','text/csv;charset=utf-8');};
 $('import').onchange=async e=>{try{const file=e.target.files[0];if(!file)return;if(file.size>5e6)throw Error();const data=JSON.parse(await file.text());if(!valid(data))throw Error();if(confirm(`Substituir os dados locais por ${data.people.length} colaboradores e ${data.records.length} períodos? Exporte um backup antes se precisar preservar os registros atuais.`)){if(save(data))message('Backup importado.');}}catch{alert('Backup inválido. Selecione um arquivo JSON exportado por esta aplicação.');}finally{e.target.value='';}};$('print').onclick=()=>window.print();render();
