@@ -3,7 +3,8 @@ import { Buffer } from 'node:buffer';
 
 const origin = 'https://caf-cod.github.io';
 const repo = '/repos/caf-cod/ausencias';
-const file = repo + '/contents/dados/ausencias.json';
+const cgcafFile = repo + '/contents/dados/ausencias.json';
+const cgmcafFile = repo + '/contents/dados/ausencias-cgmcaf.json';
 const limit = 750_000;
 
 function reply(status, data) {
@@ -121,7 +122,8 @@ function normalizedState(data) {
 export default {
   async fetch(request, env) {
     const path = new URL(request.url).pathname;
-    if (path === '/health' && request.method === 'GET') {
+    const file = path === '/save/cgmcaf' || path === '/health/cgmcaf' ? cgmcafFile : cgcafFile;
+    if ((path === '/health' || path === '/health/cgmcaf') && request.method === 'GET') {
       try {
         const response = await github(file + '?ref=main', await installationToken(env));
         if (response.ok) return reply(200, { ready: true });
@@ -134,7 +136,7 @@ export default {
         return reply(503, { ready: false, check });
       }
     }
-    if (path !== '/save') return reply(404, { error: 'Rota inexistente.' });
+    if (path !== '/save' && path !== '/save/cgmcaf') return reply(404, { error: 'Rota inexistente.' });
     if (request.headers.get('Origin') !== origin) return reply(403, { error: 'Origem inválida.' });
     if (request.method === 'OPTIONS') return reply(204);
     if (request.method !== 'POST') return reply(405, { error: 'Método inválido.' });
