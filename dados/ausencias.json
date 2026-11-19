@@ -112,20 +112,6 @@
       "end": "2027-09-30"
     },
     {
-      "id": "0942a814-708a-46ac-92cf-19c1c4c53e20",
-      "person": "09bcb534-96c2-4ea9-a0ce-04f4a47e43cf",
-      "type": "Workshop",
-      "start": "2026-11-17",
-      "end": "2026-11-19"
-    },
-    {
-      "id": "af40b6a3-8994-4478-a000-68f69cb7e6f8",
-      "person": "538573eb-9afa-480f-a643-5cf930b60347",
-      "type": "Workshop",
-      "start": "2026-11-17",
-      "end": "2026-11-19"
-    },
-    {
       "id": "b756fd34-12df-427a-bb61-d6a46694e92b",
       "person": "655c2c40-099f-46bd-bc60-ad427e626017",
       "type": "Férias",
@@ -133,24 +119,38 @@
       "end": "2026-11-20"
     },
     {
+      "id": "1b3661cd-0441-4a1c-bdea-4ded9eb3dcdc",
+      "person": "2213901a-8c21-45dd-baa8-b4f2e5aeee7e",
+      "type": "Workshop",
+      "start": "2026-11-17",
+      "end": "2026-11-18"
+    },
+    {
+      "id": "0942a814-708a-46ac-92cf-19c1c4c53e20",
+      "person": "09bcb534-96c2-4ea9-a0ce-04f4a47e43cf",
+      "type": "Workshop",
+      "start": "2026-11-17",
+      "end": "2026-11-18"
+    },
+    {
+      "id": "af40b6a3-8994-4478-a000-68f69cb7e6f8",
+      "person": "538573eb-9afa-480f-a643-5cf930b60347",
+      "type": "Workshop",
+      "start": "2026-11-17",
+      "end": "2026-11-18"
+    },
+    {
       "id": "fdfd9e70-f027-4250-95c5-0fedc86dcad7",
       "person": "82102796-0714-4595-bff3-850eba65aad9",
       "type": "Workshop",
       "start": "2026-11-17",
-      "end": "2026-11-19"
+      "end": "2026-11-18"
     },
     {
       "id": "eaa71538-c530-4f10-9bfe-c8c62f1b3d46",
       "person": "130409a4-7fac-450a-b902-70a7595871c0",
       "type": "Workshop",
       "start": "2026-11-18",
-      "end": "2026-11-19"
-    },
-    {
-      "id": "1b3661cd-0441-4a1c-bdea-4ded9eb3dcdc",
-      "person": "2213901a-8c21-45dd-baa8-b4f2e5aeee7e",
-      "type": "Workshop",
-      "start": "2026-11-17",
       "end": "2026-11-18"
     }
   ],
