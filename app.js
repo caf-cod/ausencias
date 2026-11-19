@@ -58,6 +58,20 @@ $('import').onchange=async e=>{try{const file=e.target.files[0];if(!file)return;
 const coordination = new URLSearchParams(location.search).get('coordenacao') === 'cgmcaf' ? 'cgmcaf' : 'cgcaf';
 const coordinationLabel = coordination.toUpperCase();
 const dataFile = coordination === 'cgmcaf' ? 'ausencias-cgmcaf.json' : 'ausencias.json';
+const workerOrigin = 'https://caf-ausencias-api.caf-cicaf2026.workers.dev';
+async function readData(name, fallback) {
+  try {
+    const response = await fetch(workerOrigin + '/data/' + name, { cache: 'no-store' });
+    if (response.ok) return await response.json();
+  } catch {}
+  const response = await fetch(fallback + '?ref=main', { headers: headers(), cache: 'no-cache' });
+  if (!response.ok) {
+    throw new Error([403, 429].includes(response.status)
+      ? 'A consulta ao GitHub atingiu o limite. Os registros estão temporariamente indisponíveis nesta tela.'
+      : 'Não foi possível consultar o GitHub (' + response.status + ').');
+  }
+  return response.json();
+}
 const endpoint = 'https://api.github.com/repos/caf-cod/ausencias/contents/dados/' + dataFile;
 $('coordinationName').textContent = coordinationLabel;
 for (const tab of document.querySelectorAll('[data-coordination]')) {
@@ -66,10 +80,10 @@ for (const tab of document.querySelectorAll('[data-coordination]')) {
   else tab.removeAttribute('aria-current');
   tab.classList.toggle('outline', !active);
 }
-function syncStatus(text){$('syncStatus').textContent=text;$('saveShared').disabled=!ready||busy||!dirty;$('reloadShared').disabled=busy;$('new').disabled=!ready||busy;}
+function syncStatus(text){$('stats').style.display=ready?'':'none';$('syncStatus').textContent=text;$('saveShared').disabled=!ready||busy||!dirty;$('reloadShared').disabled=busy;$('new').disabled=!ready||busy;}
 function headers(){return {'Accept':'application/vnd.github+json'};}
 function decodeContent(content){const binary=atob(content.replace(/\s/g,''));return new TextDecoder().decode(Uint8Array.from(binary,c=>c.charCodeAt(0)));}
-async function readRemote(){const response=await fetch(endpoint+'?ref=main&t='+Date.now(),{headers:headers(),cache:'no-store'});if(!response.ok)throw new Error(response.status===403||response.status===429?'Limite de consultas do GitHub atingido. Tente novamente mais tarde.':'Não foi possível consultar a base no GitHub ('+response.status+').');const file=await response.json();const data=JSON.parse(decodeContent(file.content));if(!valid(data)||!file.sha)throw new Error('A base do GitHub está em formato inválido.');return {data,sha:file.sha};}
+async function readRemote(){const file=await readData(coordination,endpoint);const data=JSON.parse(decodeContent(file.content));if(!valid(data)||!file.sha)throw new Error('A base do GitHub está em formato inválido.');return {data,sha:file.sha};}
 async function loadShared(){if(busy)return;if(dirty&&!confirm('Descartar as alterações pendentes e carregar a última versão do GitHub? Exporte um backup antes se precisar preservá-las.'))return;busy=true;syncStatus('Carregando a última versão do GitHub…');try{const remote=await readRemote();state=remote.data;remoteSha=remote.sha;ready=true;dirty=false;render();syncStatus('Base compartilhada carregada. Nenhuma alteração pendente.');}catch(error){syncStatus(error.message+(ready?' As alterações atuais foram preservadas.':' Use Recarregar para tentar novamente.'));}finally{busy=false;$('personForm').querySelector('button').disabled=!ready;syncStatus($('syncStatus').textContent);}}
 const saveEndpoint='https://caf-ausencias-api.caf-cicaf2026.workers.dev/save' + (coordination === 'cgmcaf' ? '/cgmcaf' : '');
 async function saveShared() {
@@ -116,5 +130,5 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&coordinat
 
 function validateFederalCalendar(data){if(!data||data.version!==1||!data.years||!data.recess||!Array.isArray(data.review)||typeof data.checkedAt!=='string'||!Number.isFinite(Date.parse(data.checkedAt)))return false;const safeEntry=e=>e&&validDate(e.date)&&typeof e.name==='string'&&e.name.length<=250&&typeof e.kind==='string'&&e.kind.length<=100;return Object.entries(data.years).every(([y,p])=>/^20\d{2}$/.test(y)&&Array.isArray(p.entries)&&p.entries.length>=14&&p.entries.length<=100&&p.entries.every(e=>safeEntry(e)&&e.date.startsWith(y+'-')))&&Object.entries(data.recess).every(([y,p])=>/^20\d{2}$/.test(y)&&Array.isArray(p.periods)&&p.periods.length===2&&p.periods.every(r=>validDate(r.start)&&validDate(r.end)&&r.start<=r.end&&typeof r.name==='string'));}
 function calendarStatus(){if(!federalCalendar)return;const y=$('month').value.slice(0,4);const checked=new Date(federalCalendar.checkedAt).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'});$('calendarSyncStatus').textContent='Última consulta automática: '+checked+' (Brasília). '+(federalCalendar.years[y]?'Calendário de '+y+' extraído de fonte oficial. ':'Sem calendário oficial validado de '+y+'; pontos facultativos continuam como previsão. ')+(federalCalendar.review.length?federalCalendar.review.length+' ocorrência(s) aguardam revisão. ':'')+'A consulta cobre notícias do MGI e Agência Gov e publicações conhecidas; não é uma varredura integral do DOU.';}
-async function loadFederalCalendar(){const button=$('refreshCalendar');button.disabled=true;try{const response=await fetch('https://api.github.com/repos/caf-cod/ausencias/contents/dados/calendario-federal.json?ref=main&t='+Date.now(),{headers:headers(),cache:'no-store'});if(!response.ok)throw Error();const file=await response.json(),data=JSON.parse(decodeContent(file.content));if(!validateFederalCalendar(data))throw Error();federalCalendar=data;calendarStatus();if(!$('dialog').open)render();else message('Calendário atualizado. Feche o formulário e atualize o recorte para visualizar.');}catch{$('calendarSyncStatus').textContent='Não foi possível carregar a consulta automática. Mantidos os dados de calendário já disponíveis. Tente Recarregar calendário novamente.';}finally{button.disabled=false;}}
+async function loadFederalCalendar(){const button=$('refreshCalendar');button.disabled=true;try{const file=await readData('calendario-federal','https://api.github.com/repos/caf-cod/ausencias/contents/dados/calendario-federal.json'),data=JSON.parse(decodeContent(file.content));if(!validateFederalCalendar(data))throw Error();federalCalendar=data;calendarStatus();if(!$('dialog').open)render();else message('Calendário atualizado. Feche o formulário e atualize o recorte para visualizar.');}catch{$('calendarSyncStatus').textContent='Não foi possível carregar a consulta automática. Mantidos os dados de calendário já disponíveis. Tente Recarregar calendário novamente.';}finally{button.disabled=false;}}
 $('refreshCalendar').onclick=loadFederalCalendar;loadFederalCalendar();
