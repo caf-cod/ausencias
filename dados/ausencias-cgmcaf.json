@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "people": [],
+  "records": [],
+  "absenceTypes": [
+    "Férias",
+    "Licença",
+    "Recesso"
+  ],
+  "holidays": []
+}
