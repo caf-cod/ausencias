@@ -19,9 +19,11 @@ function reply(status, data) {
 }
 
 async function github(path, token, method = 'GET', data) {
+  const stage = path.endsWith('/installation') ? 'installation' :
+    path.endsWith('/access_tokens') ? 'token' : 'file';
   return fetch('https://api.github.com' + path, {
     method,
-    redirect: 'error',
+    redirect: 'manual',
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: 'Bearer ' + token,
@@ -30,7 +32,7 @@ async function github(path, token, method = 'GET', data) {
       'Content-Type': 'application/json',
     },
     body: data === undefined ? undefined : JSON.stringify(data),
-  });
+  }).catch(() => { throw new Error(stage + '_network'); });
 }
 
 async function installationToken(env) {
@@ -49,15 +51,15 @@ async function installationToken(env) {
   const jwt = payload + '.' + signature;
   const installation = await github(repo + '/installation', jwt);
   if (!installation.ok) throw new Error('installation_http_' + installation.status);
-  const { id } = await installation.json();
-  if (!Number.isSafeInteger(id)) throw new Error('Invalid installation ID');
+  const { id } = await installation.json().catch(() => { throw new Error('installation_invalid_response'); });
+  if (!Number.isSafeInteger(id)) throw new Error('installation_invalid_response');
   const response = await github('/app/installations/' + id + '/access_tokens', jwt, 'POST', {
     repositories: ['ausencias'],
     permissions: { contents: 'write' },
   });
   if (!response.ok) throw new Error('token_http_' + response.status);
-  const { token } = await response.json();
-  if (!token) throw new Error('Missing installation token');
+  const { token } = await response.json().catch(() => { throw new Error('token_invalid_response'); });
+  if (!token) throw new Error('token_invalid_response');
   return token;
 }
 
@@ -126,7 +128,7 @@ export default {
         return reply(503, { ready: false, check: 'file_http_' + response.status });
       } catch (error) {
         const code = error?.message;
-        const check = /^(missing_bindings|invalid_private_key|(?:installation|token)_http_[1-5][0-9]{2})$/.test(code)
+        const check = /^(missing_bindings|invalid_private_key|(?:installation|token|file)_(?:network|invalid_response|http_[1-5][0-9]{2}))$/.test(code)
           ? code
           : 'github_request_failed';
         return reply(503, { ready: false, check });
