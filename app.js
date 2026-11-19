@@ -24,7 +24,7 @@ function renderHolidays(){if(federalCalendar)calendarStatus();renderRecess();con
 $('holidayForm').onsubmit=e=>{e.preventDefault();const name=$('holidayName').value.trim(),day=$('holidayDate').value,kind=$('holidayKind').value;if(!name||!validDate(day))return;if(customHolidays(state).length>=1000)return message('Limite de datas cadastradas atingido.');if(holidaysForYear(Number(day.slice(0,4))).some(h=>h.date===day&&normalizeLabel(h.name)===normalizeLabel(name)))return message('Esta data já está cadastrada.');if(save({...state,holidays:[...customHolidays(state),{id:crypto.randomUUID(),name,date:day,kind}]})){$('holidayForm').reset();message('Data adicionada. Clique em Salvar alterações para compartilhar.');}};
 function valid(data){return data&&data.version===1&&validHolidays(data)&&Array.isArray(catalog(data))&&catalog(data).length<=100&&catalog(data).every(t=>typeof t==='string'&&t.trim()===t&&t.length>0&&t.length<=60)&&new Set(catalog(data).map(normalizeLabel)).size===catalog(data).length&&Array.isArray(data.people)&&Array.isArray(data.records)&&data.people.length<=1000&&data.records.length<=20000&&data.people.every(p=>typeof p.id==='string'&&typeof p.name==='string'&&p.name.trim()&&p.name.length<=100)&&new Set(data.people.map(p=>p.id)).size===data.people.length&&new Set(data.records.map(r=>r.id)).size===data.records.length&&data.records.every(r=>typeof r.id==='string'&&data.people.some(p=>p.id===r.person)&&catalog(data).includes(r.type)&&validDate(r.start)&&validDate(r.end)&&r.start<=r.end);}
 let state={version:1,people:[],records:[]};
-let remoteSha=null, ready=false, dirty=false, busy=false, githubToken='';
+let remoteSha=null, ready=false, dirty=false, busy=false;
 const name=id=>state.people.find(p=>p.id===id)?.name||'', clash=(a,b)=>a.start<=b.end&&b.start<=a.end, overlaps=records=>records.flatMap((a,i)=>records.slice(i+1).filter(b=>a.person!==b.person&&clash(a,b)).map(b=>({a,b,start:a.start>b.start?a.start:b.start,end:a.end<b.end?a.end:b.end})));
 function coordinationDay(now=new Date()){const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now);const part=k=>parts.find(p=>p.type===k).value;return part('year')+'-'+part('month')+'-'+part('day');}
 function nextDay(day){const d=new Date(day+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+1);return d.toISOString().slice(0,10);}
@@ -57,28 +57,51 @@ $('import').onchange=async e=>{try{const file=e.target.files[0];if(!file)return;
 
 const endpoint='https://api.github.com/repos/caf-cod/ausencias/contents/dados/ausencias.json';
 function syncStatus(text){$('syncStatus').textContent=text;$('saveShared').disabled=!ready||busy||!dirty;$('reloadShared').disabled=busy;$('new').disabled=!ready||busy;}
-function headers(){return {'Accept':'application/vnd.github+json',...(githubToken?{'Authorization':'Bearer '+githubToken}:{})};}
+function headers(){return {'Accept':'application/vnd.github+json'};}
 function decodeContent(content){const binary=atob(content.replace(/\s/g,''));return new TextDecoder().decode(Uint8Array.from(binary,c=>c.charCodeAt(0)));}
-function encodeContent(text){const bytes=new TextEncoder().encode(text);let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);return btoa(binary);}
-async function readRemote(){const response=await fetch(endpoint+'?ref=main&t='+Date.now(),{headers:headers(),cache:'no-store'});if(!response.ok)throw new Error(response.status===403||response.status===429?'Limite de consultas do GitHub atingido. Conecte seu acesso ou tente novamente mais tarde.':'Não foi possível consultar a base no GitHub ('+response.status+').');const file=await response.json();const data=JSON.parse(decodeContent(file.content));if(!valid(data)||!file.sha)throw new Error('A base do GitHub está em formato inválido.');return {data,sha:file.sha};}
+async function readRemote(){const response=await fetch(endpoint+'?ref=main&t='+Date.now(),{headers:headers(),cache:'no-store'});if(!response.ok)throw new Error(response.status===403||response.status===429?'Limite de consultas do GitHub atingido. Tente novamente mais tarde.':'Não foi possível consultar a base no GitHub ('+response.status+').');const file=await response.json();const data=JSON.parse(decodeContent(file.content));if(!valid(data)||!file.sha)throw new Error('A base do GitHub está em formato inválido.');return {data,sha:file.sha};}
 async function loadShared(){if(busy)return;if(dirty&&!confirm('Descartar as alterações pendentes e carregar a última versão do GitHub? Exporte um backup antes se precisar preservá-las.'))return;busy=true;syncStatus('Carregando a última versão do GitHub…');try{const remote=await readRemote();state=remote.data;remoteSha=remote.sha;ready=true;dirty=false;render();syncStatus('Base compartilhada carregada. Nenhuma alteração pendente.');}catch(error){syncStatus(error.message+(ready?' As alterações atuais foram preservadas.':' Use Recarregar para tentar novamente.'));}finally{busy=false;$('personForm').querySelector('button').disabled=!ready;syncStatus($('syncStatus').textContent);}}
-async function saveShared(){if(!ready||busy||!dirty)return;if(!githubToken){$('authDialog').showModal();return;}busy=true;syncStatus('Salvando alterações no GitHub…');const snapshot=JSON.stringify(state,null,2);try{const current=await readRemote();if(current.sha!==remoteSha)throw new Error('Outra pessoa atualizou a base. Suas alterações não foram enviadas. Exporte um backup, recarregue a última versão e reaplique suas alterações.');const response=await fetch(endpoint,{method:'PUT',headers:{...headers(),'Content-Type':'application/json'},body:JSON.stringify({message:'Atualizar planejamento de ausências',content:encodeContent(snapshot),sha:remoteSha,branch:'main'})});if(!response.ok){if(response.status===409||response.status===422)throw new Error('A base mudou durante o salvamento. Exporte seu backup e recarregue antes de tentar novamente.');if(response.status===401||response.status===403){githubToken='';$('connectGithub').textContent='Conectar ao GitHub';throw new Error('Acesso recusado. Conecte um token válido com permissão Contents: Read and write no repositório ausencias.');}throw new Error('O GitHub não confirmou o salvamento ('+response.status+'). Seus dados continuam na tela; exporte um backup e recarregue para conferir a versão remota.');}const result=await response.json();remoteSha=result.content.sha;dirty=false;syncStatus('✓ Alterações salvas no GitHub e disponíveis para os próximos acessos.');message('Base compartilhada atualizada.');}catch(error){syncStatus(error.message);}finally{busy=false;syncStatus($('syncStatus').textContent);}}
+const saveEndpoint='https://caf-ausencias-api.caf-cicaf2026.workers.dev/save';
+async function saveShared() {
+  if (!ready || busy || !dirty) return;
+  busy = true;
+  syncStatus('Salvando alterações no GitHub…');
+  try {
+    const response = await fetch(saveEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: state, sha: remoteSha }),
+    });
+    const result = await response.json().catch(() => null);
+    if (!response.ok) throw new Error(result?.error || 'O servidor não confirmou o salvamento.');
+    if (!/^[0-9a-f]{40}$/.test(result?.sha || '')) {
+      throw new Error('O servidor não confirmou a versão salva.');
+    }
+    remoteSha = result.sha;
+    dirty = false;
+    syncStatus('✓ Alterações salvas no GitHub e disponíveis para os próximos acessos.');
+    message('Base compartilhada atualizada.');
+  } catch (error) {
+    syncStatus(error instanceof TypeError
+      ? 'Não foi possível acessar o serviço de salvamento. Suas alterações continuam na tela.'
+      : error.message);
+  } finally {
+    busy = false;
+    syncStatus($('syncStatus').textContent);
+  }
+}
 $('saveShared').onclick=saveShared;$('reloadShared').onclick=loadShared;
-$('connectGithub').onclick=()=>{if(githubToken){githubToken='';$('connectGithub').textContent='Conectar ao GitHub';message('Acesso desconectado.');}else $('authDialog').showModal();};
-$('closeAuth').onclick=()=>{$('authForm').reset();$('authDialog').close();};
-$('authDialog').addEventListener('close',()=>$('authForm').reset());
-$('authForm').onsubmit=e=>{e.preventDefault();githubToken=$('githubToken').value.trim();$('authForm').reset();$('authDialog').close();$('connectGithub').textContent='Desconectar GitHub';if(dirty)saveShared();else if(!ready)loadShared();else message('Acesso conectado nesta aba.');};
 window.addEventListener('beforeunload',e=>{if(dirty||busy){e.preventDefault();e.returnValue='';}});
 loadShared();
 
 
-setInterval(()=>{if(coordinationDay()!==renderedDay&&!$('dialog').open&&!$('authDialog').open)render();},30000);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&coordinationDay()!==renderedDay&&!$('dialog').open&&!$('authDialog').open)render();});
+setInterval(()=>{if(coordinationDay()!==renderedDay&&!$('dialog').open)render();},30000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&coordinationDay()!==renderedDay&&!$('dialog').open)render();});
 
 
 
 
 function validateFederalCalendar(data){if(!data||data.version!==1||!data.years||!data.recess||!Array.isArray(data.review)||typeof data.checkedAt!=='string'||!Number.isFinite(Date.parse(data.checkedAt)))return false;const safeEntry=e=>e&&validDate(e.date)&&typeof e.name==='string'&&e.name.length<=250&&typeof e.kind==='string'&&e.kind.length<=100;return Object.entries(data.years).every(([y,p])=>/^20\d{2}$/.test(y)&&Array.isArray(p.entries)&&p.entries.length>=14&&p.entries.length<=100&&p.entries.every(e=>safeEntry(e)&&e.date.startsWith(y+'-')))&&Object.entries(data.recess).every(([y,p])=>/^20\d{2}$/.test(y)&&Array.isArray(p.periods)&&p.periods.length===2&&p.periods.every(r=>validDate(r.start)&&validDate(r.end)&&r.start<=r.end&&typeof r.name==='string'));}
 function calendarStatus(){if(!federalCalendar)return;const y=$('month').value.slice(0,4);const checked=new Date(federalCalendar.checkedAt).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'});$('calendarSyncStatus').textContent='Última consulta automática: '+checked+' (Brasília). '+(federalCalendar.years[y]?'Calendário de '+y+' extraído de fonte oficial. ':'Sem calendário oficial validado de '+y+'; pontos facultativos continuam como previsão. ')+(federalCalendar.review.length?federalCalendar.review.length+' ocorrência(s) aguardam revisão. ':'')+'A consulta cobre notícias do MGI e Agência Gov e publicações conhecidas; não é uma varredura integral do DOU.';}
-async function loadFederalCalendar(){const button=$('refreshCalendar');button.disabled=true;try{const response=await fetch('https://api.github.com/repos/caf-cod/ausencias/contents/dados/calendario-federal.json?ref=main&t='+Date.now(),{headers:headers(),cache:'no-store'});if(!response.ok)throw Error();const file=await response.json(),data=JSON.parse(decodeContent(file.content));if(!validateFederalCalendar(data))throw Error();federalCalendar=data;calendarStatus();if(!$('dialog').open&&!$('authDialog').open)render();else message('Calendário atualizado. Feche o formulário e atualize o recorte para visualizar.');}catch{$('calendarSyncStatus').textContent='Não foi possível carregar a consulta automática. Mantidos os dados de calendário já disponíveis. Tente Recarregar calendário novamente.';}finally{button.disabled=false;}}
+async function loadFederalCalendar(){const button=$('refreshCalendar');button.disabled=true;try{const response=await fetch('https://api.github.com/repos/caf-cod/ausencias/contents/dados/calendario-federal.json?ref=main&t='+Date.now(),{headers:headers(),cache:'no-store'});if(!response.ok)throw Error();const file=await response.json(),data=JSON.parse(decodeContent(file.content));if(!validateFederalCalendar(data))throw Error();federalCalendar=data;calendarStatus();if(!$('dialog').open)render();else message('Calendário atualizado. Feche o formulário e atualize o recorte para visualizar.');}catch{$('calendarSyncStatus').textContent='Não foi possível carregar a consulta automática. Mantidos os dados de calendário já disponíveis. Tente Recarregar calendário novamente.';}finally{button.disabled=false;}}
 $('refreshCalendar').onclick=loadFederalCalendar;loadFederalCalendar();
