@@ -34,21 +34,28 @@ async function github(path, token, method = 'GET', data) {
 }
 
 async function installationToken(env) {
+  if (!env.GITHUB_APP_ID || !env.GITHUB_PRIVATE_KEY) throw new Error('missing_bindings');
   const now = Math.floor(Date.now() / 1000);
   const encode = value => Buffer.from(JSON.stringify(value)).toString('base64url');
   const payload = encode({ alg: 'RS256', typ: 'JWT' }) + '.' +
     encode({ iat: now - 60, exp: now + 480, iss: String(env.GITHUB_APP_ID) });
   const key = env.GITHUB_PRIVATE_KEY.trim();
-  const jwt = payload + '.' + sign('RSA-SHA256', Buffer.from(payload), key).toString('base64url');
+  let signature;
+  try {
+    signature = sign('RSA-SHA256', Buffer.from(payload), key).toString('base64url');
+  } catch {
+    throw new Error('invalid_private_key');
+  }
+  const jwt = payload + '.' + signature;
   const installation = await github(repo + '/installation', jwt);
-  if (!installation.ok) throw new Error('Installation lookup failed');
+  if (!installation.ok) throw new Error('installation_http_' + installation.status);
   const { id } = await installation.json();
   if (!Number.isSafeInteger(id)) throw new Error('Invalid installation ID');
   const response = await github('/app/installations/' + id + '/access_tokens', jwt, 'POST', {
     repositories: ['ausencias'],
     permissions: { contents: 'write' },
   });
-  if (!response.ok) throw new Error('Installation token request failed');
+  if (!response.ok) throw new Error('token_http_' + response.status);
   const { token } = await response.json();
   if (!token) throw new Error('Missing installation token');
   return token;
@@ -116,8 +123,14 @@ export default {
       try {
         const response = await github(file + '?ref=main', await installationToken(env));
         if (response.ok) return reply(200, { ready: true });
-      } catch {}
-      return reply(503, { ready: false });
+        return reply(503, { ready: false, check: 'file_http_' + response.status });
+      } catch (error) {
+        const code = error?.message;
+        const check = /^(missing_bindings|invalid_private_key|(?:installation|token)_http_[1-5][0-9]{2})$/.test(code)
+          ? code
+          : 'github_request_failed';
+        return reply(503, { ready: false, check });
+      }
     }
     if (path !== '/save') return reply(404, { error: 'Rota inexistente.' });
     if (request.headers.get('Origin') !== origin) return reply(403, { error: 'Origem inválida.' });
