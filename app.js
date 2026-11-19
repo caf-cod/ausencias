@@ -52,16 +52,26 @@ $('delete').onclick=()=>{if(confirm('Excluir este período?')){if(save({...state
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.removeHoliday){if(confirm('Excluir esta data cadastrada?'))save({...state,holidays:customHolidays(state).filter(h=>h.id!==b.dataset.removeHoliday)});return;}if(b.dataset.removeType!==undefined){const label=catalog(state)[Number(b.dataset.removeType)];if(!label)return;if(state.records.some(r=>r.type===label))return alert('Este tipo está vinculado a períodos cadastrados. Altere ou exclua esses períodos antes de remover o tipo.');if(confirm('Excluir o tipo de ausência '+label+'?'))save({...state,absenceTypes:catalog(state).filter(t=>t!==label)});return;}if(b.dataset.edit)open(b.dataset.edit);if(b.dataset.removePerson){const id=b.dataset.removePerson;if(state.records.some(r=>r.person===id))return alert('Exclua os períodos deste colaborador antes de removê-lo.');if(confirm('Remover este colaborador?'))save({...state,people:state.people.filter(p=>p.id!==id)});}if(b.dataset.rename){const p=state.people.find(p=>p.id===b.dataset.rename),v=prompt('Nome do colaborador:',p.name)?.trim();if(v&&v.length<=100){if(state.people.some(x=>x.id!==p.id&&x.name.toLocaleLowerCase()===v.toLocaleLowerCase()))return alert('Nome já cadastrado.');save({...state,people:state.people.map(x=>x.id===p.id?{...x,name:v}:x)});}}});
 $('new').onclick=()=>open();$('close').onclick=()=>$('dialog').close();for(const id of ['person','start','end'])$(id).oninput=warn;for(const id of ['month','personFilter','typeFilter'])$(id).onchange=()=>{if($('month').value)render();};function move(n){const [y,m]=$('month').value.split('-').map(Number);$('month').value=iso(new Date(y,m-1+n,1)).slice(0,7);render();}$('prev').onclick=()=>move(-1);$('next').onclick=()=>move(1);$('today').onclick=()=>{$('month').value=iso(new Date()).slice(0,7);render();};
 function download(text,file,type){const url=URL.createObjectURL(new Blob([text],{type})),a=document.createElement('a');a.href=url;a.download=file;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-$('backup').onclick=()=>download(JSON.stringify(state,null,2),'ausencias-backup-'+iso(new Date())+'.json','application/json');$('csv').onclick=()=>{const cell=s=>'"'+String(/^[=+@\-\t\r]/.test(s)?"'"+s:s).replace(/"/g,'""')+'"';download('\ufeff'+[['Colaborador','Tipo','Início','Fim','Dias corridos'],...filtered().map(r=>[name(r.person),r.type,fmt(r.start),fmt(r.end),days(r.start,r.end)])].map(row=>row.map(cell).join(';')).join('\r\n'),'ausencias-'+$('month').value+'.csv','text/csv;charset=utf-8');};
+$('backup').onclick=()=>download(JSON.stringify(state,null,2),'ausencias-'+coordination+'-backup-'+iso(new Date())+'.json','application/json');$('csv').onclick=()=>{const cell=s=>'"'+String(/^[=+@\-\t\r]/.test(s)?"'"+s:s).replace(/"/g,'""')+'"';download('\ufeff'+[['Colaborador','Tipo','Início','Fim','Dias corridos'],...filtered().map(r=>[name(r.person),r.type,fmt(r.start),fmt(r.end),days(r.start,r.end)])].map(row=>row.map(cell).join(';')).join('\r\n'),'ausencias-'+coordination+'-'+$('month').value+'.csv','text/csv;charset=utf-8');};
 $('import').onchange=async e=>{try{const file=e.target.files[0];if(!file)return;if(file.size>5e6)throw Error();const data=JSON.parse(await file.text());if(!valid(data))throw Error();if(confirm(`Substituir os dados locais por ${data.people.length} colaboradores e ${data.records.length} períodos? Exporte um backup antes se precisar preservar os registros atuais.`)){if(save(data))message('Backup importado.');}}catch{alert('Backup inválido. Selecione um arquivo JSON exportado por esta aplicação.');}finally{e.target.value='';}};$('print').onclick=()=>window.print();render();
 
-const endpoint='https://api.github.com/repos/caf-cod/ausencias/contents/dados/ausencias.json';
+const coordination = new URLSearchParams(location.search).get('coordenacao') === 'cgmcaf' ? 'cgmcaf' : 'cgcaf';
+const coordinationLabel = coordination.toUpperCase();
+const dataFile = coordination === 'cgmcaf' ? 'ausencias-cgmcaf.json' : 'ausencias.json';
+const endpoint = 'https://api.github.com/repos/caf-cod/ausencias/contents/dados/' + dataFile;
+$('coordinationName').textContent = coordinationLabel;
+for (const tab of document.querySelectorAll('[data-coordination]')) {
+  const active = tab.dataset.coordination === coordination;
+  if (active) tab.setAttribute('aria-current', 'page');
+  else tab.removeAttribute('aria-current');
+  tab.classList.toggle('outline', !active);
+}
 function syncStatus(text){$('syncStatus').textContent=text;$('saveShared').disabled=!ready||busy||!dirty;$('reloadShared').disabled=busy;$('new').disabled=!ready||busy;}
 function headers(){return {'Accept':'application/vnd.github+json'};}
 function decodeContent(content){const binary=atob(content.replace(/\s/g,''));return new TextDecoder().decode(Uint8Array.from(binary,c=>c.charCodeAt(0)));}
 async function readRemote(){const response=await fetch(endpoint+'?ref=main&t='+Date.now(),{headers:headers(),cache:'no-store'});if(!response.ok)throw new Error(response.status===403||response.status===429?'Limite de consultas do GitHub atingido. Tente novamente mais tarde.':'Não foi possível consultar a base no GitHub ('+response.status+').');const file=await response.json();const data=JSON.parse(decodeContent(file.content));if(!valid(data)||!file.sha)throw new Error('A base do GitHub está em formato inválido.');return {data,sha:file.sha};}
 async function loadShared(){if(busy)return;if(dirty&&!confirm('Descartar as alterações pendentes e carregar a última versão do GitHub? Exporte um backup antes se precisar preservá-las.'))return;busy=true;syncStatus('Carregando a última versão do GitHub…');try{const remote=await readRemote();state=remote.data;remoteSha=remote.sha;ready=true;dirty=false;render();syncStatus('Base compartilhada carregada. Nenhuma alteração pendente.');}catch(error){syncStatus(error.message+(ready?' As alterações atuais foram preservadas.':' Use Recarregar para tentar novamente.'));}finally{busy=false;$('personForm').querySelector('button').disabled=!ready;syncStatus($('syncStatus').textContent);}}
-const saveEndpoint='https://caf-ausencias-api.caf-cicaf2026.workers.dev/save';
+const saveEndpoint='https://caf-ausencias-api.caf-cicaf2026.workers.dev/save' + (coordination === 'cgmcaf' ? '/cgmcaf' : '');
 async function saveShared() {
   if (!ready || busy || !dirty) return;
   busy = true;
@@ -73,6 +83,9 @@ async function saveShared() {
       body: JSON.stringify({ data: state, sha: remoteSha }),
     });
     const result = await response.json().catch(() => null);
+    if (response.status === 404 && coordination === 'cgmcaf') {
+      throw new Error('O serviço de salvamento da CGMCAF ainda está indisponível. Suas alterações continuam na tela.');
+    }
     if (!response.ok) throw new Error(result?.error || 'O servidor não confirmou o salvamento.');
     if (!/^[0-9a-f]{40}$/.test(result?.sha || '')) {
       throw new Error('O servidor não confirmou a versão salva.');
