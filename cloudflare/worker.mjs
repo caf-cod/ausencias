@@ -10,7 +10,7 @@ const limit = 750_000;
 function reply(status, data) {
   const headers = {
     'Access-Control-Allow-Origin': origin,
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Cache-Control': 'no-store',
   };
@@ -122,7 +122,19 @@ function normalizedState(data) {
 export default {
   async fetch(request, env) {
     const path = new URL(request.url).pathname;
-    const file = path === '/save/cgmcaf' || path === '/health/cgmcaf' ? cgmcafFile : cgcafFile;
+    const file = path === '/data/cgmcaf' || path === '/save/cgmcaf' || path === '/health/cgmcaf' ? cgmcafFile : cgcafFile;
+    if (request.method === 'GET' && ['/data/cgcaf', '/data/cgmcaf', '/data/calendario-federal'].includes(path)) {
+      const target = path === '/data/calendario-federal'
+        ? repo + '/contents/dados/calendario-federal.json' : file;
+      try {
+        const response = await github(target + '?ref=main', await installationToken(env));
+        if (response.ok) {
+          const { content, sha } = await response.json();
+          return reply(200, { content, sha });
+        }
+      } catch {}
+      return reply(502, { error: 'Não foi possível consultar o arquivo no GitHub.' });
+    }
     if ((path === '/health' || path === '/health/cgmcaf') && request.method === 'GET') {
       try {
         const response = await github(file + '?ref=main', await installationToken(env));
