@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "checkedAt": "2026-11-19T11:07:33.847893+00:00",
+  "checkedAt": "2026-11-20T11:08:54.843895+00:00",
   "years": {
     "2026": {
       "entries": [
@@ -165,7 +165,7 @@
       "url": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026",
       "title": "Governo divulga calendário de feriados e pontos facultativos de 2026. Confira",
       "year": 2026,
-      "hash": "1d0ae6da67878f855d64d453cc005f38e355426e0974c8c5efd43244e7186faa",
+      "hash": "238aa67cb9365f3cf0b0b5f3fd1286042806f1cf1b19a3942b975b96d24c140b",
       "published": "2025-12-30",
       "type": "calendar",
       "entries": [
@@ -308,7 +308,7 @@
       "url": "https://www.gov.br/gestao/pt-br/assuntos/editoria-defeso-eleitoral/portaria-do-mgi-orienta-sobre-o-recesso-de-fim-de-ano-de-2026-no-servico-publico-federal",
       "title": "Portaria do MGI orienta sobre o recesso de fim de ano de 2026 no serviço público federal",
       "year": 2026,
-      "hash": "f58d135f6d976e4793ebebf6101fd7f2fa12c32e4259b3b1fce0c885fe85e278",
+      "hash": "bcf15b315f51cbc35efb2b5ab27ae167dc173b8e333c33a0d1cdae1379946d26",
       "published": "2026-08-07",
       "type": "recess",
       "periods": [
@@ -328,7 +328,7 @@
       "url": "https://www.gov.br/gestao/pt-br/assuntos/noticias/2026/outubro/ponto-facultativo-do-dia-do-servidor-publico-sera-transferido-para-30-de-outubro",
       "title": "Ponto facultativo do Dia do Servidor Público será transferido para 30 de outubro",
       "year": 2026,
-      "hash": "e2959bff56c2bc9444b0b07ef39153b19ee0ffd45690e302b5f983d27d1f435e",
+      "hash": "c7f48431f1b95424ff07e0115cd9095d062a0247b9f5dedf1272ffb9af848a78",
       "published": "2026-10-26",
       "type": "transfer",
       "date": "2026-10-30"
