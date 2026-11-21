@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "checkedAt": "2026-11-20T11:08:54.843895+00:00",
+  "checkedAt": "2026-11-21T10:53:48.699336+00:00",
   "years": {
     "2026": {
       "entries": [
@@ -165,7 +165,7 @@
       "url": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026",
       "title": "Governo divulga calendário de feriados e pontos facultativos de 2026. Confira",
       "year": 2026,
-      "hash": "238aa67cb9365f3cf0b0b5f3fd1286042806f1cf1b19a3942b975b96d24c140b",
+      "hash": "60299a7893d85b03ad801126088f2e4d8bb1da81424041706435099069eea4dc",
       "published": "2025-12-30",
       "type": "calendar",
       "entries": [
@@ -328,7 +328,7 @@
       "url": "https://www.gov.br/gestao/pt-br/assuntos/noticias/2026/outubro/ponto-facultativo-do-dia-do-servidor-publico-sera-transferido-para-30-de-outubro",
       "title": "Ponto facultativo do Dia do Servidor Público será transferido para 30 de outubro",
       "year": 2026,
-      "hash": "c7f48431f1b95424ff07e0115cd9095d062a0247b9f5dedf1272ffb9af848a78",
+      "hash": "ababb021b61eab9121028b8158c00e18ff9db972443b55c5b0e7ea785eb135db",
       "published": "2026-10-26",
       "type": "transfer",
       "date": "2026-10-30"
