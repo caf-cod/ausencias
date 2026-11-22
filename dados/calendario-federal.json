@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "checkedAt": "2026-11-21T10:53:48.699336+00:00",
+  "checkedAt": "2026-11-22T10:52:57.171930+00:00",
   "years": {
     "2026": {
       "entries": [
@@ -165,7 +165,7 @@
       "url": "https://agenciagov.ebc.com.br/noticias/202512/confira-o-calendario-oficial-de-feriados-nacionais-e-pontos-facultativos-em-2026",
       "title": "Governo divulga calendário de feriados e pontos facultativos de 2026. Confira",
       "year": 2026,
-      "hash": "60299a7893d85b03ad801126088f2e4d8bb1da81424041706435099069eea4dc",
+      "hash": "e07ef6dc12094d14ec587c2eca5876074614a756070c72446dd56cc42df54bff",
       "published": "2025-12-30",
       "type": "calendar",
       "entries": [
@@ -334,6 +334,31 @@
       "date": "2026-10-30"
     }
   },
-  "review": [],
+  "review": [
+    {
+      "source": "https://www.gov.br/gestao/pt-br/assuntos/noticias?b_start:int=0",
+      "reason": "<urlopen error [Errno 104] Connection reset by peer>"
+    },
+    {
+      "source": "https://www.gov.br/gestao/pt-br/assuntos/noticias?b_start:int=30",
+      "reason": "<urlopen error [Errno 104] Connection reset by peer>"
+    },
+    {
+      "source": "https://www.gov.br/gestao/pt-br/assuntos/noticias?b_start:int=60",
+      "reason": "<urlopen error [Errno 104] Connection reset by peer>"
+    },
+    {
+      "source": "https://www.gov.br/gestao/pt-br/assuntos/editoria-defeso-eleitoral",
+      "reason": "<urlopen error [Errno 104] Connection reset by peer>"
+    },
+    {
+      "source": "https://www.gov.br/gestao/pt-br/assuntos/editoria-defeso-eleitoral/portaria-do-mgi-orienta-sobre-o-recesso-de-fim-de-ano-de-2026-no-servico-publico-federal",
+      "reason": "<urlopen error [Errno 104] Connection reset by peer>"
+    },
+    {
+      "source": "https://www.gov.br/gestao/pt-br/assuntos/noticias/2026/outubro/ponto-facultativo-do-dia-do-servidor-publico-sera-transferido-para-30-de-outubro",
+      "reason": "<urlopen error [Errno 104] Connection reset by peer>"
+    }
+  ],
   "discovery": "Notícias recentes do MGI (até 3 páginas), Agência Gov e fontes já conhecidas. Não abrange todo o DOU."
 }
